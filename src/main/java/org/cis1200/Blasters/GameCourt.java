@@ -15,17 +15,19 @@ import java.awt.event.KeyEvent;
 public class GameCourt extends JPanel {
 
     // the state of the game logic
-    private Square square; // the Black Square, keyboard control
+    private BottomPaddle bottomPaddle; // the Black Square, keyboard control
     private Circle snitch; // the Golden Snitch, bounces
-    private Poison poison; // the Poison Mushroom, doesn't move
+    private TopPaddle topPaddle; // the top paddle, it auto moves
+    private Square square;
+    private Poison poison;
 
     private boolean playing = false; // whether the game is running
     private final JLabel status; // Current status text, i.e. "Running..."
 
     // Game constants
     public static final int COURT_WIDTH = 300;
-    public static final int COURT_HEIGHT = 300;
-    public static final int SQUARE_VELOCITY = 4;
+    public static final int COURT_HEIGHT = 600;
+    public static final int SQUARE_VELOCITY = 8;
 
     // Update interval for timer, in milliseconds
     public static final int INTERVAL = 35;
@@ -52,13 +54,9 @@ public class GameCourt extends JPanel {
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    square.setVx(-SQUARE_VELOCITY);
+                    bottomPaddle.setVx(-SQUARE_VELOCITY);
                 } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    square.setVx(SQUARE_VELOCITY);
-                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    square.setVy(SQUARE_VELOCITY);
-                } else if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    square.setVy(-SQUARE_VELOCITY);
+                    bottomPaddle.setVx(SQUARE_VELOCITY);
                 }
             }
 
@@ -75,9 +73,10 @@ public class GameCourt extends JPanel {
      * (Re-)set the game to its initial state.
      */
     public void reset() {
-        square = new Square(COURT_WIDTH, COURT_HEIGHT, Color.BLACK);
-        poison = new Poison(COURT_WIDTH, COURT_HEIGHT);
-        snitch = new Circle(COURT_WIDTH, COURT_HEIGHT, Color.YELLOW);
+        bottomPaddle = new BottomPaddle(COURT_WIDTH, COURT_HEIGHT);
+        topPaddle = new TopPaddle(COURT_WIDTH, COURT_HEIGHT);
+        //poison = new Poison(COURT_WIDTH, COURT_HEIGHT);
+        snitch = new Circle(COURT_WIDTH, COURT_HEIGHT, Color.WHITE);
 
         playing = true;
         status.setText("Running...");
@@ -93,22 +92,24 @@ public class GameCourt extends JPanel {
     void tick() {
         if (playing) {
             // advance the square and snitch in their current direction.
-            square.move();
+            bottomPaddle.move();
+            topPaddle.move();
             snitch.move();
 
             // make the snitch bounce off walls...
             snitch.bounce(snitch.hitWall());
-            // ...and the mushroom
-            snitch.bounce(snitch.hitObj(poison));
+            // ...and the paddles
+            snitch.bounce(snitch.hitObj(topPaddle));
+            snitch.bounce(snitch.hitObj(bottomPaddle));
 
             // check for the game end conditions
-            if (square.intersects(poison)) {
+            /*if (square.intersects(poison)) {
                 playing = false;
                 status.setText("You lose!");
             } else if (square.intersects(snitch)) {
                 playing = false;
                 status.setText("You win!");
-            }
+            }*/
 
             // update the display
             repaint();
@@ -118,8 +119,8 @@ public class GameCourt extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        square.draw(g);
-        poison.draw(g);
+        topPaddle.draw(g);
+        bottomPaddle.draw(g);
         snitch.draw(g);
     }
 

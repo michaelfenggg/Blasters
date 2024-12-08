@@ -221,6 +221,23 @@ public abstract class GameObj {
         }
     }
 
+    public Direction hitPaddle() {
+        if (this.px + this.vx < 0) {
+            return Direction.LEFT;
+        } else if (this.px + this.vx > this.maxX) {
+            return Direction.RIGHT;
+        }
+
+        if (this.py + this.vy < 0) {
+            return Direction.UP;
+        } else if (this.py + this.vy > this.maxY) {
+            return Direction.DOWN;
+        } else {
+            return null;
+        }
+    }
+
+
     /**
      * Determine whether the game object will hit another object in the next
      * time step. If so, return the direction of the other object in relation to

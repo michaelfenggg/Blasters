@@ -3,14 +3,15 @@ package org.cis1200.Blasters;
 import java.awt.*;
 
 public class TopPaddle extends GameObj{
-    public static final int SIZE = 20;
+    public static final int HEIGHT = 20;
+    public static final int WIDTH = 60;
     public static final int INIT_POS_X = 0;
-    public static final int INIT_POS_Y = 0;
+    public static final int INIT_POS_Y = 20;
     public static final int INIT_VEL_X = 0;
     public static final int INIT_VEL_Y = 0;
 
-    public TopPaddle(int vx, int vy, int px, int py, int width, int height, int courtwidth, int courtheight) {
-        super(vx, vy, px, py, width, height, courtwidth, courtheight);
+    public TopPaddle(int courtWidth, int courtHeight) {
+        super(INIT_VEL_X, INIT_VEL_Y, INIT_POS_X, INIT_POS_Y, WIDTH, HEIGHT, courtWidth, courtHeight);
     }
 
     /**
@@ -25,9 +26,7 @@ public class TopPaddle extends GameObj{
      */
     @Override
     public void draw(Graphics g) {
-        int x = this.getPx() + this.getVx();
-        int y = 270;
-        g.setColor(Color.BLACK); // Set the color for the paddle
-        g.fillRect(x, y, this.getWidth(), this.getHeight());
+        g.setColor(Color.BLACK);
+        g.fillRect(this.getPx(), this.getPy(), this.getWidth(), this.getHeight());
     }
 }
