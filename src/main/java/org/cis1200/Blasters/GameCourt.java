@@ -18,6 +18,8 @@ public class GameCourt extends JPanel {
     private BottomPaddle bottomPaddle; // the Black Square, keyboard control
     private Circle snitch; // the Golden Snitch, bounces
     private TopPaddle topPaddle; // the top paddle, it auto moves
+    private TopWall topWall;
+    private BottomWall bottomWall;
     private Square square;
     private Poison poison;
 
@@ -61,8 +63,8 @@ public class GameCourt extends JPanel {
             }
 
             public void keyReleased(KeyEvent e) {
-                square.setVx(0);
-                square.setVy(0);
+                bottomPaddle.setVx(0);
+                bottomPaddle.setVy(0);
             }
         });
 
@@ -76,7 +78,9 @@ public class GameCourt extends JPanel {
         bottomPaddle = new BottomPaddle(COURT_WIDTH, COURT_HEIGHT);
         topPaddle = new TopPaddle(COURT_WIDTH, COURT_HEIGHT);
         //poison = new Poison(COURT_WIDTH, COURT_HEIGHT);
-        snitch = new Circle(COURT_WIDTH, COURT_HEIGHT, Color.WHITE);
+        snitch = new Circle(COURT_WIDTH, COURT_HEIGHT, Color.BLACK);
+        topWall = new TopWall(COURT_WIDTH, COURT_HEIGHT);
+        bottomWall = new BottomWall(COURT_WIDTH, COURT_HEIGHT);
 
         playing = true;
         status.setText("Running...");
@@ -103,13 +107,13 @@ public class GameCourt extends JPanel {
             snitch.bounce(snitch.hitObj(bottomPaddle));
 
             // check for the game end conditions
-            /*if (square.intersects(poison)) {
-                playing = false;
-                status.setText("You lose!");
-            } else if (square.intersects(snitch)) {
+            if (snitch.intersects(topWall)) {
                 playing = false;
                 status.setText("You win!");
-            }*/
+            } else if (snitch.intersects(bottomWall)) {
+                playing = false;
+                status.setText("You lose!");
+            }
 
             // update the display
             repaint();
@@ -122,6 +126,8 @@ public class GameCourt extends JPanel {
         topPaddle.draw(g);
         bottomPaddle.draw(g);
         snitch.draw(g);
+        topWall.draw(g);
+        bottomWall.draw(g);
     }
 
     @Override

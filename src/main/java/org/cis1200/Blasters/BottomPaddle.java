@@ -7,7 +7,7 @@ public class BottomPaddle extends GameObj{
     public static final int HEIGHT = 20;
     public static final int WIDTH = 60;
     public static final int INIT_POS_X = 0;
-    public static final int INIT_POS_Y = 550;
+    public static final int INIT_POS_Y = 565;
     public static final int INIT_VEL_X = 0;
     public static final int INIT_VEL_Y = 0;
 
