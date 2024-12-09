@@ -125,8 +125,11 @@ public class GameCourt extends JPanel {
             // make the snitch bounce off walls...
             snitch.bounceWall(snitch.hitWall());
             // ...and the paddles
+            /*
             snitch.bouncePaddle(snitch.hitObj(topPaddle));
-            snitch.bouncePaddle(snitch.hitObj(bottomPaddle));
+            snitch.bouncePaddle(snitch.hitObj(bottomPaddle));*/
+            snitch.bouncePaddle(snitch.hitTopPaddle(topPaddle));
+            snitch.bouncePaddle(snitch.hitBottomPaddle(bottomPaddle));
 
             // check for the game end conditions
             if (snitch.intersects(topWall)) {

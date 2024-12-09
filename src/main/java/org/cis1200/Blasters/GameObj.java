@@ -197,6 +197,16 @@ public abstract class GameObj {
         }
     }
 
+    public Direction hitTopPaddle(GameObj that) {
+        //if it does hit the top paddle, you should return should down and up otherwise
+        return null;
+    }
+
+    public Direction hitBottomPaddle(GameObj that) {
+        //if it does hit the bottom paddle, you should return should up and down otherwise
+        return null;
+    }
+
     /**
      * Update the velocity of the object in response to hitting a wall in
      * the given direction. If the direction is up or down, this method has no effect
