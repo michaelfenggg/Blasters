@@ -34,7 +34,7 @@ public class GameCourt extends JPanel {
     public static final int SQUARE_VELOCITY = 8;
 
     // Update interval for timer, in milliseconds
-    public static final int INTERVAL = 100;
+    public static final int INTERVAL = 13;
 
     //checking if it's the first time the game is being run, if so we load game state
     private int tickCalls = 0;
@@ -128,8 +128,8 @@ public class GameCourt extends JPanel {
             /*
             snitch.bouncePaddle(snitch.hitObj(topPaddle));
             snitch.bouncePaddle(snitch.hitObj(bottomPaddle));*/
-            snitch.bouncePaddle(snitch.hitTopPaddle(topPaddle));
-            snitch.bouncePaddle(snitch.hitBottomPaddle(bottomPaddle));
+            snitch.bouncePaddle(topPaddle.hitTopPaddle(snitch));
+            snitch.bouncePaddle(bottomPaddle.hitBottomPaddle(snitch));
 
             // check for the game end conditions
             if (snitch.intersects(topWall)) {

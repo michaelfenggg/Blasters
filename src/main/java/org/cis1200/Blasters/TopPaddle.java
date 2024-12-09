@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class TopPaddle extends GameObj{
     public static final int HEIGHT = 10;
-    public static final int WIDTH = 90;
+    public static final int WIDTH = 60;
     public static final int INIT_POS_X = 0;
     public static final int INIT_POS_Y = 15;
     public static final int INIT_VEL_X = 0;
@@ -27,6 +27,23 @@ public class TopPaddle extends GameObj{
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(this.getPx(), this.getPy(), (int) (this.getWidth() * 2 / 3), this.getHeight());
+        g.fillRect(this.getPx(), this.getPy(), (int) (this.getWidth()), this.getHeight());
+    }
+
+    public Direction hitTopPaddle(GameObj that) {
+        //if it does hit the bottom paddle, you should return should up and down otherwise
+        //should only check when the ball is at a specific y coordinate (or range since it might never hit that exact y coordinate)
+        /*if ((that.getPy() + that.getHeight() - 565) > 0 && (that.getPy() + that.getHeight() - 565) <= 2) {
+            if (that.getPx() >= this.getPx() - 30 && that.getPx() <= this.getPx() + 30) {
+                return Direction.DOWN;
+            }
+        }*/
+        if (this.intersects(that)) {
+            // Ensure the ball is hitting the top of the paddle
+            //if (that.getPy() - that.getHeight() <= this.getPy() - 2) {
+                return Direction.UP;
+            //}
+        }
+        return null;
     }
 }

@@ -199,11 +199,8 @@ public abstract class GameObj {
 
     public Direction hitTopPaddle(GameObj that) {
         //if it does hit the top paddle, you should return should down and up otherwise
-        return null;
-    }
+        //should only check when the ball is at a specific y coordinate (or range since it might never hit that exact y coordinate)
 
-    public Direction hitBottomPaddle(GameObj that) {
-        //if it does hit the bottom paddle, you should return should up and down otherwise
         return null;
     }
 
