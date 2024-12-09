@@ -15,7 +15,7 @@ public class RunBlasters implements Runnable {
 
         // Top-level frame in which game components live.
         // Be sure to change "TOP LEVEL FRAME" to the name of your game
-        final JFrame frame = new JFrame("TOP LEVEL FRAME");
+        final JFrame frame = new JFrame("Pong!");
         frame.setLocation(300, 600);
 
         // Status panel
@@ -40,12 +40,19 @@ public class RunBlasters implements Runnable {
         reset.addActionListener(e -> court.reset());
         control_panel.add(reset);
 
+        // Add Save button
+        final JButton save = new JButton("Save");
+        save.addActionListener(e -> court.saveGameState("src/main/java/org/cis1200/Blasters/game_state.txt"));
+        control_panel.add(save);
+
         // Put the frame on the screen
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        // Start game
+        //System.out.println("Loading game state...");
+        court.loadGameState("src/main/java/org/cis1200/Blasters/game_state.txt");
         court.reset();
+
     }
 }

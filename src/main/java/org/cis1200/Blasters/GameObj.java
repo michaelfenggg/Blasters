@@ -170,13 +170,41 @@ public abstract class GameObj {
     }
 
     /**
-     * Update the velocity of the object in response to hitting an obstacle in
-     * the given direction. If the direction is null, this method has no effect
+     * Update the velocity of the object in response to hitting a wall in
+     * the given direction. If the direction is up or down, this method has no effect
      * on the object.
      *
      * @param d The direction in which this object hit an obstacle
      */
-    public void bounce(Direction d) {
+    public void bounceWall(Direction d) {
+        if (d == null) {
+            return;
+        }
+
+        switch (d) {
+            case UP:
+                break;
+            case DOWN:
+                break;
+            case LEFT:
+                this.vx = Math.abs(this.vx);
+                break;
+            case RIGHT:
+                this.vx = -Math.abs(this.vx);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Update the velocity of the object in response to hitting a wall in
+     * the given direction. If the direction is up or down, this method has no effect
+     * on the object.
+     *
+     * @param d The direction in which this object hit an obstacle
+     */
+    public void bouncePaddle (Direction d) {
         if (d == null) {
             return;
         }
@@ -189,10 +217,8 @@ public abstract class GameObj {
                 this.vy = -Math.abs(this.vy);
                 break;
             case LEFT:
-                this.vx = Math.abs(this.vx);
                 break;
             case RIGHT:
-                this.vx = -Math.abs(this.vx);
                 break;
             default:
                 break;

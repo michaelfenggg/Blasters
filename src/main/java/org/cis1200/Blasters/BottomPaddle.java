@@ -4,10 +4,10 @@ import java.awt.*;
 
 public class BottomPaddle extends GameObj{
 
-    public static final int HEIGHT = 20;
-    public static final int WIDTH = 60;
+    public static final int HEIGHT = 10;
+    public static final int WIDTH = 90;
     public static final int INIT_POS_X = 0;
-    public static final int INIT_POS_Y = 565;
+    public static final int INIT_POS_Y = 570;
     public static final int INIT_VEL_X = 0;
     public static final int INIT_VEL_Y = 0;
 
@@ -27,6 +27,6 @@ public class BottomPaddle extends GameObj{
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(this.getPx(), this.getPy(), this.getWidth(), this.getHeight());
+        g.fillRect(this.getPx(), this.getPy(), (int) (this.getWidth() * 2 / 3), this.getHeight());
     }
 }
