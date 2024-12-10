@@ -24,6 +24,7 @@ public class GameCourt extends JPanel {
     private BottomWall bottomWall;
     private Square square;
     private Poison poison;
+    boolean firstTimePlaying = true;
 
     private boolean playing = false; // whether the game is running
     private final JLabel status; // Current status text, i.e. "Running..."
@@ -87,7 +88,7 @@ public class GameCourt extends JPanel {
         snitch = new TeleportingBall(COURT_WIDTH, COURT_HEIGHT, Color.BLACK);
         topWall = new TopWall(COURT_WIDTH, COURT_HEIGHT);
         bottomWall = new BottomWall(COURT_WIDTH, COURT_HEIGHT);
-
+        tickCalls = 0;
         playing = true;
         status.setText("Running...");
 
@@ -131,7 +132,8 @@ public class GameCourt extends JPanel {
             snitch.bouncePaddle(topPaddle.hitTopPaddle(snitch));
             snitch.bouncePaddle(bottomPaddle.hitBottomPaddle(snitch));
 
-            if (tickCalls == 0) {
+            if (tickCalls == 0 && firstTimePlaying) {
+                firstTimePlaying = false;
                 loadGameState("src/main/java/org/cis1200/Blasters/game_state.txt");
             }
 
@@ -160,6 +162,13 @@ public class GameCourt extends JPanel {
             writer.write(topPaddle.getPx() + "," + topPaddle.getPy());
             writer.newLine();
             writer.write(bottomPaddle.getPx() + "," + bottomPaddle.getPy());
+            writer.newLine();
+            if (isPlaying()) {
+                writer.write(String.valueOf(tickCalls));
+            }
+            else {
+                writer.write("0");
+            }
             writer.close();
         } catch (IOException e) {
             status.setText("Error saving game state!");
@@ -168,28 +177,59 @@ public class GameCourt extends JPanel {
     }
 
     public void loadGameState(String filename) {
-        reset();
         System.out.println("Loading game state from " + filename);
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             //System.out.println("Reading first line");
-            String[] ballState = reader.readLine().split(",");
-            //System.out.println("Read ball state: " + Arrays.toString(ballState));
-            snitch.setPx(Integer.parseInt(ballState[0]));
-            snitch.setPy(Integer.parseInt(ballState[1]));
-            snitch.setVx(Integer.parseInt(ballState[2]));
-            snitch.setVy(Integer.parseInt(ballState[3]));
+            try {
+                String[] ballState = reader.readLine().split(",");
+                if (ballState.length != 4) {
+                    throw new IOException("Invalid game state file!");
+                }
+                //System.out.println("Read ball state: " + Arrays.toString(ballState));
+                snitch.setPx(Integer.parseInt(ballState[0]));
+                snitch.setPy(Integer.parseInt(ballState[1]));
+                snitch.setVx(Integer.parseInt(ballState[2]));
+                snitch.setVy(Integer.parseInt(ballState[3]));
+            }
+            catch (Exception e) {
+                status.setText("Error loading game state — we reset!");
+                return;
+            }
 
-            //System.out.println("reading second line");
-            String[] topPaddleState = reader.readLine().split(",");
-            topPaddle.setPx(Integer.parseInt(topPaddleState[0]));
-            topPaddle.setPy(Integer.parseInt(topPaddleState[1]));
-            //System.out.println("Loaded top paddle state: " + Arrays.toString(topPaddleState));
+            try {
+                String[] topPaddleState = reader.readLine().split(",");
+                if (topPaddleState.length != 2) {
+                    throw new IOException("Invalid game state file!");
+                }
+                topPaddle.setPx(Integer.parseInt(topPaddleState[0]));
+                topPaddle.setPy(Integer.parseInt(topPaddleState[1]));
+            }
+            catch (Exception e) {
+                status.setText("Error loading game state — we reset!");
+                return;
+            }
 
             //System.out.println("reading third line");
-            String[] bottomPaddleState = reader.readLine().split(",");
-            bottomPaddle.setPx(Integer.parseInt(bottomPaddleState[0]));
-            bottomPaddle.setPy(Integer.parseInt(bottomPaddleState[1]));
-            //System.out.println("Loaded bottom paddle state: " + Arrays.toString(bottomPaddleState));
+            try {
+                String[] bottomPaddleState = reader.readLine().split(",");
+                if (bottomPaddleState.length != 2) {
+                    throw new IOException("Invalid game state file!");
+                }
+                bottomPaddle.setPx(Integer.parseInt(bottomPaddleState[0]));
+                bottomPaddle.setPy(Integer.parseInt(bottomPaddleState[1]));
+            }
+            catch (Exception e) {
+                status.setText("Error loading game state — we reset!");
+                return;
+            }
+
+            try {
+                tickCalls = Integer.parseInt(reader.readLine()); // Load the tick count
+            } catch (Exception e) {
+                status.setText("Error loading game state — we reset!");
+                return;
+            }
+
             repaint();
         } catch (Exception e) {
             status.setText("Error loading game state — we reset!");
@@ -200,16 +240,33 @@ public class GameCourt extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        topPaddle.draw(g);
-        bottomPaddle.draw(g);
-        snitch.draw(g);
-        topWall.draw(g);
-        bottomWall.draw(g);
-        System.out.println("snitch pos: " + snitch.getPx() + ", " + snitch.getPy() + " tickCalls: " + tickCalls);
+        if (topPaddle != null) {
+            topPaddle.draw(g);
+        }
+        if (bottomPaddle != null) {
+            bottomPaddle.draw(g);
+        }
+        if (snitch != null) {
+            snitch.draw(g);
+        }
+        if (topWall != null) {
+            topWall.draw(g);
+        }
+        if (bottomWall != null) {
+            bottomWall.draw(g);
+        }
     }
 
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(COURT_WIDTH, COURT_HEIGHT);
+    }
+
+    public int getTickCalls() {
+        return tickCalls;
+    }
+
+    public boolean isPlaying() {
+        return playing;
     }
 }
