@@ -50,6 +50,15 @@ public class RunBlasters implements Runnable {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
+        // Show instructions popup
+        String instructions = "<html>Welcome to Pong!<br><br>"
+                + "Instructions:<br>"
+                + "- Use the left and right arrow keys to move the bottom paddle.<br>"
+                + "- The goal is to prevent the ball from hitting the bottom wall.<br>"
+                + "- The game ends when the ball hits the top or bottom wall.<br><br>"
+                + "Good luck!</html>";
+        JOptionPane.showMessageDialog(frame, instructions, "Game Instructions", JOptionPane.INFORMATION_MESSAGE);
+
         //System.out.println("Loading game state...");
         court.loadGameState("src/main/java/org/cis1200/Blasters/game_state.txt");
         court.reset();

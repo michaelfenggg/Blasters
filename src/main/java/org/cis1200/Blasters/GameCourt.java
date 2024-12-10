@@ -34,7 +34,7 @@ public class GameCourt extends JPanel {
     public static final int SQUARE_VELOCITY = 8;
 
     // Update interval for timer, in milliseconds
-    public static final int INTERVAL = 13;
+    public static final int INTERVAL = 8;
 
     //checking if it's the first time the game is being run, if so we load game state
     private int tickCalls = 0;
@@ -131,20 +131,22 @@ public class GameCourt extends JPanel {
             snitch.bouncePaddle(topPaddle.hitTopPaddle(snitch));
             snitch.bouncePaddle(bottomPaddle.hitBottomPaddle(snitch));
 
-            // check for the game end conditions
-            if (snitch.intersects(topWall)) {
-                playing = false;
-                status.setText("You win!");
-            } else if (snitch.intersects(bottomWall)) {
-                playing = false;
-                status.setText("You lose!");
-            }
-
             if (tickCalls == 0) {
                 loadGameState("src/main/java/org/cis1200/Blasters/game_state.txt");
             }
 
             tickCalls++;
+            status.setText("Ticks elapsed: " + tickCalls);
+
+            // check for the game end conditions
+            if (snitch.intersects(topWall)) {
+                playing = false;
+                status.setText("You win! Ticks elapsed: " + tickCalls);
+            } else if (snitch.intersects(bottomWall)) {
+                playing = false;
+                status.setText("You lose! Ticks elapsed: " + tickCalls);
+            }
+
             // update the display
             repaint();
         }
@@ -189,8 +191,8 @@ public class GameCourt extends JPanel {
             bottomPaddle.setPy(Integer.parseInt(bottomPaddleState[1]));
             //System.out.println("Loaded bottom paddle state: " + Arrays.toString(bottomPaddleState));
             repaint();
-        } catch (IOException e) {
-            status.setText("Error loading game state!");
+        } catch (Exception e) {
+            status.setText("Error loading game state — we reset!");
             e.printStackTrace();
         }
     }
